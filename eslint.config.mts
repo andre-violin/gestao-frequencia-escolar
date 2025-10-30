@@ -1,26 +1,23 @@
-import js from '@eslint/js'
-import { defineConfig } from 'eslint/config'
-import eslintConfigPrettier from 'eslint-config-prettier'
-import simpleImportSort from 'eslint-plugin-simple-import-sort'
-import globals from 'globals'
-import tseslint from 'typescript-eslint'
-
-export default defineConfig([
-  {
-    files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
-    plugins: { js },
-    extends: ['js/recommended'],
-    languageOptions: { globals: globals.node },
+module.exports = {
+  parser: '@typescript-eslint/parser',
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'prettier',
+    'plugin:prettier/recommended',
+  ],
+  parserOptions: {
+    ecmaVersion: 2020,
+    sourceType: 'module',
   },
-  tseslint.configs.recommended,
-  eslintConfigPrettier,
-  {
-    plugins: {
-      'simple-import-sort': simpleImportSort,
-    },
-    rules: {
-      'simple-import-sort/imports': 'error',
-      'simple-import-sort/exports': 'error',
-    },
+  env: {
+    node: true,
+    es6: true,
   },
-])
+  rules: {
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    '@typescript-eslint/no-explicit-any': 'warn',
+    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    'prettier/prettier': ['error', {}, { usePrettierrc: true }],
+  },
+};

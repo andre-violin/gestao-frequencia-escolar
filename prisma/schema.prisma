@@ -1,0 +1,45 @@
+// ========================================
+// CONFIGURAÇÃO DO PRISMA PARA MONGODB
+// ========================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// ========================================
+// MODELO DE ESTUDANTE
+// ========================================
+
+model Student {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  email        String   @unique
+  registration String   @unique
+  course       String
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("students")
+}
+
+// ========================================
+// MODELO DE PROFESSOR
+// ========================================
+
+model Teacher {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  email     String   @unique
+  subject   String   // Disciplina que leciona
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("teachers")
+}

@@ -1,41 +1,91 @@
-import cors from 'cors'
+/**
+ * 🚀 SERVIDOR EXPRESS - VERSÃO SIMPLIFICADA (FUNCIONAL)
+ *
+ * Este arquivo inicia o servidor Express de forma simples, sem usar classes.
+ * Perfeito para estudantes de nível técnico!
+ */
+
 import express, { Application } from 'express'
+import cors from 'cors'
 import helmet from 'helmet'
+import dotenv from 'dotenv'
 
-class App {
-  public express: Application
-  private port: number
+import routes from './routes'
+import { conectar } from './services/database.service'
 
-  constructor() {
-    this.express = express()
-    this.port = 5500
-    this.initializeMiddlewares()
-    this.initializeRoutes()
-  }
+// Carregar variáveis de ambiente
+dotenv.config()
 
-  private initializeMiddlewares(): void {
-    // Middlewares de segurança
-    this.express.use(helmet())
-    this.express.use(cors())
+// Configurações
+const PORT = parseInt(process.env.PORT || '3000', 10)
 
-    // Parser JSONO
-    this.express.use(express.json())
-  }
+// Criar aplicação Express
+const app: Application = express()
 
-  private initializeRoutes(): void {
-    // Health check
-    this.express.get('/health', (req, res) => {
-      res.json({ status: 'OK', timestamp: new Date().toISOString() })
+// ========================================
+// 1️⃣ CONFIGURAR MIDDLEWARES
+// ========================================
+
+/**
+ * Middlewares são funções que executam ANTES das rotas.
+ * Eles processam as requisições (requests) antes de chegarem nos controllers.
+ */
+
+// 🔒 Helmet: Adiciona segurança HTTP (protege contra ataques comuns)
+app.use(helmet())
+
+// 🌐 CORS: Permite que outros sites acessem a API
+app.use(cors())
+
+// 📦 JSON Parser: Converte o body das requisições de JSON para objeto JavaScript
+app.use(express.json())
+
+// ========================================
+// 2️⃣ CONFIGURAR ROTAS
+// ========================================
+
+/**
+ * Health Check: Rota simples para verificar se o servidor está funcionando
+ * Acesse: http://localhost:3000/health
+ */
+app.get('/health', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'Servidor funcionando perfeitamente!',
+    timestamp: new Date().toISOString(),
+  })
+})
+
+/**
+ * Rotas da API: Todas as rotas de estudantes estão em /api
+ * Exemplo: http://localhost:3000/api/students
+ */
+app.use('/api', routes)
+
+// ========================================
+// 3️⃣ INICIAR SERVIDOR
+// ========================================
+
+/**
+ * Função assíncrona que conecta ao banco e inicia o servidor
+ */
+async function iniciarServidor(): Promise<void> {
+  try {
+    // 1. Conectar ao MongoDB
+    await conectar()
+
+    // 2. Iniciar o servidor Express
+    app.listen(PORT, () => {
+      console.log(`🚀 Servidor rodando na porta ${PORT}`)
+      console.log(`📬 Health check: http://localhost:${PORT}/health`)
+      console.log(`🎓 API Estudantes: http://localhost:${PORT}/api/students`)
+      console.log(`\n✨ Tudo pronto! Use as rotas acima para testar.\n`)
     })
-  }
-
-  public listen(): void {
-    this.express.listen(this.port, () => {
-      console.log(`🚀 Server running on port ${this.port}`)
-    })
+  } catch (erro) {
+    console.error('❌ Erro ao iniciar o servidor:', erro)
+    process.exit(1)
   }
 }
 
-// Instância do servidor
-const app = new App()
-app.listen()
+// Chamar a função para iniciar
+iniciarServidor()

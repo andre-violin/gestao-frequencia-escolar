@@ -1,0 +1,25 @@
+{
+  "ultimoId": 2,
+  "dados": [
+    {
+      "id": "1",
+      "name": "Jubileu Zaq",
+      "email": "jubz@email.com",
+      "registration": "20240001",
+      "course": "ADS",
+      "isActive": false,
+      "createdAt": "2025-10-02T20:22:21.389Z",
+      "updatedAt": "2025-10-02T20:22:21.389Z"
+    },
+    {
+      "id": "2",
+      "name": "Zabeleu Zaq",
+      "email": "zabz@email.com",
+      "registration": "20240002",
+      "course": "ADS",
+      "isActive": true,
+      "createdAt": "2025-10-02T20:22:49.370Z",
+      "updatedAt": "2025-10-02T20:22:49.370Z"
+    }
+  ]
+}

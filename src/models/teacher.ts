@@ -1,41 +1,17 @@
+// ========================================
+// TIPO DO PROFESSOR (COMPATÍVEL COM PRISMA E MONGODB)
+// ========================================
+
+/**
+ * Interface que representa um professor
+ * Compatível com o schema do Prisma e MongoDB
+ */
 export interface Teacher {
-  id: string
-  employeeId: string
+  id: string // ObjectId do MongoDB (gerado automaticamente)
   name: string
   email: string
-  phone: string
-  department: string
-  specialization: string[]
-  hireDate: string
-  status: TeacherStatus
-  classIds: string[]
-  createdAt: string
-  updatedAt: string
-}
-export enum TeacherStatus {
-  ACTIVE = 'ativo',
-  INACTIVE = 'inativo',
-  ON_LEAVE = 'licença',
-  RETIRED = 'aposentado',
-}
-export interface CreateTeacherRequest {
-  employeeId: string
-  name: string
-  email: string
-  phone: string
-  department: string
-  specialization: string[]
-  hireDate: string
-  status?: TeacherStatus
-  classIds?: string[]
-}
-export interface UpdateTeacherRequest {
-  employeeId?: string
-  name?: string
-  email?: string
-  phone?: string
-  department?: string
-  specialization?: string[]
-  status?: TeacherStatus
-  classIds?: string[]
+  subject: string // Disciplina que leciona
+  isActive: boolean
+  createdAt: Date | string // Aceita tanto Date quanto string para flexibilidade
+  updatedAt: Date | string
 }
